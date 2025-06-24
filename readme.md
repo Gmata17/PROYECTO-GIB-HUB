@@ -1,4 +1,4 @@
-# sistema online de ropa
+# Sistema online de ropa
 GIT
 CREAR, LEER, ACTUALIZAR, ELIMINAR
 

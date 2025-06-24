@@ -59,8 +59,6 @@ Este proyecto consiste en el desarrollo de una API utilizando **Node.js**, **Mon
 4. ⭐ **Top 5 marcas más vendidas**
    Ranking de marcas basado en la cantidad de prendas vendidas.
 
-## 🔐 Variables de entorno
-
 ---
 
 ## 👥 Integrantes del proyecto

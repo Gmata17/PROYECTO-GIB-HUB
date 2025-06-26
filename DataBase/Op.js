@@ -1,5 +1,5 @@
-require("dotenv").config();
-const { MongoClient, ObjectId } = require("mongodb");
+const { MongoClient } = require("mongodb");
+require('dotenv').config();
 
 const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri);
@@ -7,12 +7,12 @@ const client = new MongoClient(uri);
 async function main() {
   try {
     await client.connect();
-    const db = client.db("tienda_ropa");
+    const db = client.db("Tienda_de_Ropa");
 
-    const usuarios = db.collection("usuarios");
-    const marcas = db.collection("marcas");
-    const prendas = db.collection("prendas");
-    const ventas = db.collection("ventas");
+    const usuarios = db.collection("Usuarios");
+    const marcas = db.collection("Marcas");
+    const prendas = db.collection("Prendas");
+    const ventas = db.collection("Ventas");
 
     // INSERTAR UN USUARIO
     await usuarios.insertOne({

@@ -1,14 +1,19 @@
 const { MongoClient } = require("mongodb");
 require('dotenv').config();
 
-const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri);
+const uri = process.env.MONGODB_URI;
+const dbName = "Tienda_de_Ropa";
+
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true}
+);
+
+let db;
 
 async function main() {
   try {
     await client.connect();
-    const db = client.db("Tienda_de_Ropa");
-
     const usuarios = db.collection("Usuarios");
     const marcas = db.collection("Marcas");
     const prendas = db.collection("Prendas");

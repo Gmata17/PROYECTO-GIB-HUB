@@ -132,5 +132,7 @@ Puedes importar el archivo `Endpoints API.postman_collection.json` directamente 
 
 ---
 
-## ✍️ Autor
-Generado automáticamente para pruebas de API con Flask y MongoDB.
+## 👥 Integrantes del proyecto
+
+* Julian Hernandez
+* Gabriel Mata

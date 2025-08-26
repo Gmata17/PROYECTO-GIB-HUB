@@ -20,12 +20,14 @@ def create_app():
     from .controllers.clothing import clothing_endpoint
     from .controllers.sales import sales_endpoint
     from .controllers.users import users_endpoint
+    from .controllers.reports import reports_endpoint
 
     # Registrar los blueprints con prefijos adecuados
     app.register_blueprint(brands_endpoint, url_prefix="/api/v1/admin")
     app.register_blueprint(clothing_endpoint, url_prefix="/api/v1/admin")
     app.register_blueprint(sales_endpoint, url_prefix="/api/v1/admin")
     app.register_blueprint(users_endpoint, url_prefix="/api/v1/admin")
+    app.register_blueprint(reports_endpoint, url_prefix="/api/v1/admin")
     CORS(app, origins="*")  # Permitir CORS para todos los orígenes
 
     return app

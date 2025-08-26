@@ -1,0 +1,77 @@
+/* app.css - limpio, legible, usa Bootstrap + ajustes personalizados */
+
+/* Paleta suave */
+:root{
+  --bg: #f4f6f9;
+  --panel: #ffffff;
+  --muted: #6b7280;
+  --accent: #0d9488;
+  --muted-border: rgba(2,6,23,0.06);
+  --radius: 10px;
+}
+
+/* reset simple */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--bg);color:#0f172a;-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:1rem}
+
+/* header */
+header{background:linear-gradient(180deg,#ffffff,#fbfcfd);border-bottom:1px solid var(--muted-border)}
+h1{color:var(--accent);font-weight:700}
+
+/* cards and panels */
+.card{border-radius:var(--radius);background:var(--panel);border:1px solid var(--muted-border);box-shadow:0 8px 20px rgba(11,14,20,0.04)}
+.form-control, .form-select{border-radius:8px}
+
+/* tables */
+.table{color:#0f172a;border-collapse:separate;border-spacing:0}
+.table th, .table td{padding:.55rem .75rem;vertical-align:middle;white-space:nowrap;border-top:1px solid rgba(2,6,23,0.03)}
+.table-light thead th{background:transparent;font-weight:600}
+.table-auto{table-layout:auto}
+
+/* alignment */
+table thead th.text-center, table tbody td.text-center, table tbody td.actions { text-align:center; }
+table td:not(.actions), table th:not(.text-center) { text-align:left; }
+
+/* buttons */
+.btn-primary{background:var(--accent);border-color:var(--accent)}
+.btn-outline-secondary{border-color:var(--muted-border);color:#0f172a}
+.btn-sm{padding:.35rem .6rem;border-radius:8px}
+
+/* small utilities */
+.text-muted{color:var(--muted)}
+.small{font-size:.85rem}
+
+/* list group analytics */
+.list-group-item{background:transparent;border:0;padding:.45rem .6rem}
+.badge.bg-primary{background:var(--accent);color:#fff}
+
+/* responsiveness requested */
+@media (min-width:300px){
+  .container{padding:1rem}
+  input.form-control, .form-control{padding:.45rem .5rem;font-size:.95rem}
+}
+
+@media (max-width:999px){
+  .container{padding:.8rem}
+  .table td,.table th{padding:.45rem .45rem;font-size:.92rem}
+  #mainTabs{overflow-x:auto;white-space:nowrap}
+}
+
+@media (min-width:640px) and (max-width:767.98px){
+  .card{box-shadow:0 6px 12px rgba(2,6,23,0.04)}
+  .row.g-2{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}
+}
+
+@media (min-width:1000px){
+  .container{padding:1.25rem}
+  .table td,.table th{padding:.85rem .9rem}
+}
+
+@media (max-width:420px){
+  .table td,.table th{font-size:.88rem;padding:.45rem}
+  .btn{font-size:.85rem;padding:.38rem .5rem}
+}
+
+/* ensure actions column minimal width */
+.table-auto th:last-child, .table-auto td.actions { width:1%; white-space:nowrap; }

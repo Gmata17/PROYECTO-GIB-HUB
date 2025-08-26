@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clothing Store · Admin</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Optional icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="styles/app.css">
+
+  <!-- Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <header class="py-3 border-bottom bg-white">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div>
+        <h1 class="h4 mb-0 text-primary">Clothing Store · Admin</h1>
+        <small class="text-muted">Gabriel Mata · Julian Hernandez</small>
+      </div>
+      <div class="text-end">
+        <small class="text-muted d-block">Conexión: <code>http://127.0.0.1:5000/api/v1/admin</code></small>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-4">
+    <!-- Tabs -->
+    <ul class="nav nav-pills mb-4 gap-2" id="mainTabs" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-target="#tab-clothing" type="button">Prendas</button></li>
+      <li class="nav-item"><button class="nav-link" data-target="#tab-brands" type="button">Marcas</button></li>
+      <li class="nav-item"><button class="nav-link" data-target="#tab-sales" type="button">Ventas</button></li>
+      <li class="nav-item"><button class="nav-link" data-target="#tab-users" type="button">Usuarios</button></li>
+      <li class="nav-item"><button class="nav-link" data-target="#tab-analytics" type="button">Analíticas</button></li>
+    </ul>
+
+    <!-- ================= CLOTHING ================= -->
+    <section id="tab-clothing" class="tab-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 class="h6 mb-0">Prendas</h2>
+          <small class="text-muted">Listado y gestión — 10 por página</small>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="btn-refresh-clothing" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-arrows-rotate"></i> Actualizar</button>
+          <button id="btn-new-clothing" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Nueva</button>
+        </div>
+      </div>
+
+      <!-- Form Clothing -->
+      <div id="form-clothing" class="card mb-3" style="display:none;">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <h5 id="form-clothing-title" class="mb-0">Nueva Prenda</h5>
+            <small class="text-muted">IDs autogenerados por backend</small>
+          </div>
+
+          <input type="hidden" id="clothing-id">
+
+          <div class="row g-2">
+            <div class="col-md-4">
+              <label class="form-label small">Nombre</label>
+              <input id="clothing-name" class="form-control" placeholder="Urban Jacket">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label small">Marca</label>
+              <!-- select dinamico -->
+              <select id="clothing-brand_id" class="form-select">
+                <option value="">Cargando marcas...</option>
+              </select>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label small">Precio</label>
+              <input id="clothing-price" type="number" step="0.01" class="form-control" placeholder="89.95">
+            </div>
+
+            <div class="col-md-1">
+              <label class="form-label small">Stock</label>
+              <input id="clothing-in_stock" type="number" class="form-control" placeholder="150">
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label small">Tallas</label>
+              <input id="clothing-size" class="form-control" placeholder="S,M,L,XL">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label small">Categoría</label>
+              <input id="clothing-category" class="form-control" placeholder="Outerwear">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label small">Color</label>
+              <input id="clothing-color" class="form-control" placeholder="Black">
+            </div>
+
+            <div class="col-12 text-end mt-2">
+              <button id="clothing-save" class="btn btn-success btn-sm me-2"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+              <button id="clothing-cancel" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Clothing -->
+      <div class="card mb-3">
+        <div class="table-responsive">
+          <table class="table table-hover table-auto mb-0 align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th><th>Nombre</th><th>Marca</th><th>Categoría</th><th>Color</th><th>Precio</th><th>Stock</th><th>Tallas</th><th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="table-clothing"></tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-3">
+          <div>
+            <button id="clothing-prev" class="btn btn-outline-secondary btn-sm">Anterior</button>
+            <button id="clothing-next" class="btn btn-outline-secondary btn-sm">Siguiente</button>
+          </div>
+          <div class="text-muted small" id="clothing-page-info"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BRANDS ================= -->
+    <section id="tab-brands" class="tab-content" style="display:none;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 class="h6 mb-0">Marcas</h2>
+          <small class="text-muted">Crear, editar y eliminar marcas</small>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="btn-refresh-brands" class="btn btn-outline-primary btn-sm">Actualizar</button>
+          <button id="btn-new-brand" class="btn btn-primary btn-sm">Nueva</button>
+        </div>
+      </div>
+
+      <div id="form-brand" class="card mb-3" style="display:none;">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <h5 id="form-brand-title" class="mb-0">Nueva Marca</h5>
+            <small class="text-muted">Ej: UrbanStyle</small>
+          </div>
+
+          <input type="hidden" id="brand-id">
+          <div class="row g-2">
+            <div class="col-md-4">
+              <label class="form-label small">Nombre</label>
+              <input id="brand-name" class="form-control" placeholder="UrbanStyle">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">País</label>
+              <input id="brand-country" class="form-control" placeholder="USA">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label small">Fundada (año)</label>
+              <input id="brand-founded" type="number" class="form-control" placeholder="2015">
+            </div>
+
+            <div class="col-12 text-end mt-2">
+              <button id="brand-save" class="btn btn-success btn-sm me-2">Guardar</button>
+              <button id="brand-cancel" class="btn btn-outline-secondary btn-sm">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="table-responsive">
+          <table class="table table-hover table-auto mb-0 align-middle">
+            <thead class="table-light"><tr><th>ID</th><th>Nombre</th><th>País</th><th>Fundada</th><th class="text-center">Acciones</th></tr></thead>
+            <tbody id="table-brands"></tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-3">
+          <div>
+            <button id="brands-prev" class="btn btn-outline-secondary btn-sm">Anterior</button>
+            <button id="brands-next" class="btn btn-outline-secondary btn-sm">Siguiente</button>
+          </div>
+          <div class="text-muted small" id="brands-page-info"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SALES ================= -->
+    <section id="tab-sales" class="tab-content" style="display:none;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 class="h6 mb-0">Ventas</h2>
+          <small class="text-muted">Registra ventas vinculadas</small>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="btn-refresh-sales" class="btn btn-outline-primary btn-sm">Actualizar</button>
+          <button id="btn-new-sale" class="btn btn-primary btn-sm">Nueva</button>
+        </div>
+      </div>
+
+      <div id="form-sale" class="card mb-3" style="display:none;">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <h5 id="form-sale-title" class="mb-0">Nueva Venta</h5>
+            <small class="text-muted">Relaciones por IDs (selects)</small>
+          </div>
+
+          <input type="hidden" id="sale-id">
+          <div class="row g-2">
+            <div class="col-md-4">
+              <label class="form-label small">Usuario</label>
+              <select id="sale-user_id" class="form-select"><option>Cargando usuarios...</option></select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small">Prenda</label>
+              <select id="sale-clothing_id" class="form-select"><option>Cargando prendas...</option></select>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label small">Cantidad</label>
+              <input id="sale-quantity" type="number" class="form-control" value="1">
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label small">Fecha</label>
+              <input id="sale-date" type="date" class="form-control">
+            </div>
+
+            <div class="col-12 text-end mt-2">
+              <button id="sale-save" class="btn btn-success btn-sm me-2">Guardar</button>
+              <button id="sale-cancel" class="btn btn-outline-secondary btn-sm">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="table-responsive">
+          <table class="table table-hover table-auto mb-0 align-middle">
+            <thead class="table-light"><tr><th>ID</th><th>User ID</th><th>Prenda</th><th>Cantidad</th><th>Fecha</th><th class="text-center">Acciones</th></tr></thead>
+            <tbody id="table-sales"></tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-3">
+          <div>
+            <button id="sales-prev" class="btn btn-outline-secondary btn-sm">Anterior</button>
+            <button id="sales-next" class="btn btn-outline-secondary btn-sm">Siguiente</button>
+          </div>
+          <div class="text-muted small" id="sales-page-info"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= USERS ================= -->
+    <section id="tab-users" class="tab-content" style="display:none;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 class="h6 mb-0">Usuarios</h2>
+          <small class="text-muted">Crear y editar usuarios</small>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="btn-refresh-users" class="btn btn-outline-primary btn-sm">Actualizar</button>
+          <button id="btn-new-user" class="btn btn-primary btn-sm">Nuevo</button>
+        </div>
+      </div>
+
+      <div id="form-user" class="card mb-3" style="display:none;">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <h5 id="form-user-title" class="mb-0">Nuevo Usuario</h5>
+            <small class="text-muted">Password se envía como texto (backend debe hashearlo)</small>
+          </div>
+
+          <input type="hidden" id="user-id">
+
+          <div class="row g-2">
+            <div class="col-md-4">
+              <label class="form-label small">Nombre</label>
+              <input id="user-name" class="form-control" placeholder="Carlos Jiménez">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small">Email</label>
+              <input id="user-email" type="email" class="form-control" placeholder="carlos.jimenez@example.com">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small">Ciudad</label>
+              <input id="user-city" class="form-control" placeholder="San José">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small">País</label>
+              <input id="user-country" class="form-control" placeholder="Costa Rica">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small">Password</label>
+              <input id="user-password" type="password" class="form-control" placeholder="hashedcarlos123 (o contraseña)">
+            </div>
+
+            <div class="col-12 text-end mt-2">
+              <button id="user-save" class="btn btn-success btn-sm me-2">Guardar</button>
+              <button id="user-cancel" class="btn btn-outline-secondary btn-sm">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="table-responsive">
+          <table class="table table-hover table-auto mb-0 align-middle">
+            <thead class="table-light"><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Ciudad</th><th>País</th><th class="text-center">Acciones</th></tr></thead>
+            <tbody id="table-users"></tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-3">
+          <div>
+            <button id="users-prev" class="btn btn-outline-secondary btn-sm">Anterior</button>
+            <button id="users-next" class="btn btn-outline-secondary btn-sm">Siguiente</button>
+          </div>
+          <div class="text-muted small" id="users-page-info"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ANALYTICS ================= -->
+    <section id="tab-analytics" class="tab-content" style="display:none;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 class="h6 mb-0">Analíticas</h2>
+          <small class="text-muted">Marcas con ventas · Top5 · Stock restante</small>
+        </div>
+        <div class="text-muted small">Última: <span id="analytics-updated">—</span></div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="card p-3">
+            <h6>Marcas con ventas</h6>
+            <ul id="analytics-brands-with-sales" class="list-group list-group-flush"></ul>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card p-3">
+            <h6>Top 5 marcas</h6>
+            <table class="table mb-0"><thead><tr><th>Marca</th><th>Ventas</th></tr></thead><tbody id="analytics-top5"></tbody></table>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card p-3">
+            <h6>Prendas vendidas / Stock restante</h6>
+            <div class="table-responsive"><table class="table mb-0"><thead><tr><th>Prenda</th><th>Vendidas</th><th>Stock</th><th>Restante</th></tr></thead><tbody id="analytics-items-stock"></tbody></table></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-3 bg-white">
+    <div class="container text-center text-muted small">© Clothing Store · Admin</div>
+  </footer>
+
+  <script src="scripts/app.js"></script>
+</body>
+</html>

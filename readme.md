@@ -1,138 +1,148 @@
-# 🛍️ Sistema Online de Ropa
+# 🛍️ Clothing Store API + Frontend
 
-Este proyecto consiste en el desarrollo de una API utilizando **Node.js**, **MongoDB** y **Git**, para la gestión de una tienda de ropa. La API permite realizar operaciones **CRUD** (Crear, Leer, Actualizar y Eliminar) sobre varias colecciones: `usuarios`, `marcas` y `prendas`.
-
-## ⚙️ Funcionalidades principales
-
-* Inserción y consulta de **usuarios**.
-* Registro y eliminación de **marcas** de ropa.
-* Gestión de **prendas** (nombre, talla, precio, stock, colección, marca).
-* Control de **ventas** y análisis de ventas por fechas y marcas.
-* Consultas específicas mediante **MongoDB Aggregation Framework**.
-
-## 🧾 Colecciones de la base de datos (`tienda_ropa`)
-
-### 👤 Usuarios
-
-```json
-{
-  "nombre": "Luis Morales",
-  "email": "luis@example.com",
-  "direccion": "Cartago, Costa Rica"
-}
-```
-
-### 🏷️ Marcas
-
-```json
-[
-  { "nombre": "Zara" },
-  { "nombre": "Adidas" },
-  { "nombre": "Levi's" }
-]
-```
-
-### 👕 Prendas
-
-```json
-{
-  "nombre": "Camiseta Negra",
-  "talla": "L",
-  "precio": 17000,
-  "marca": "Zara",
-  "coleccion": "Verano 2025",
-  "stock": 20
-}
-```
-
-## 🔍 Consultas destacadas
-
-1. 📆 **Ventas por fecha específica**
-   Muestra la cantidad total vendida en una fecha concreta.
-
-2. 🏷️ **Marcas con al menos una venta**
-   Lista las marcas que han registrado ventas.
-
-3. 📦 **Prendas vendidas con su stock actual**
-   Combina datos de `ventas` y `prendas` para mostrar el stock restante por prenda.
-
-4. ⭐ **Top 5 marcas más vendidas**
-   Ranking de marcas basado en la cantidad de prendas vendidas.
+Proyecto completo de una **tienda de ropa** con **API REST (Flask + MongoDB Atlas)** y un **frontend (HTML, CSS, Bootstrap, JS con AJAX)**.  
+Incluye CRUD completo para todas las colecciones y reportes personalizados.
 
 ---
 
-## 👥 Integrantes del proyecto
+## 🚀 Tecnologías Utilizadas
 
-* Julian Hernandez
-* Gabriel Mata
-
-# Endpoints API - Colección de Postman
-
-Esta colección de Postman contiene los endpoints principales para probar la API de administración de **brands**.
-
-## 🌐 Base URL
-```
-http://127.0.0.1:5000/api/v1/admin/brands
-```
-
-## 📦 Endpoints disponibles
-
-### 1. Obtener todos
-- **Método:** `GET`
-- **URL:** `/brands`
-- **Descripción:** Obtiene todos los registros de marcas.
-- **Ejemplo:**  
-  ```bash
-  GET http://127.0.0.1:5000/api/v1/admin/brands
-  ```
-
-### 2. Obtener por ID
-- **Método:** `GET`
-- **URL:** `/brands?id=<id>`
-- **Descripción:** Retorna una marca específica por su ID.
-
-### 3. Crear marca
-- **Método:** `POST`
-- **URL:** `/brands`
-- **Body (JSON):**
-  ```json
-  {
-    "name": "Jerusalem",
-    "country": "Israel",
-    "founded": 1948
-  }
-  ```
-
-### 4. Actualizar marca
-- **Método:** `PUT`
-- **URL:** `/brands?id=<id>`
-- **Body (JSON):**
-  ```json
-  {
-    "name": "PuebloDios",
-    "country": "Belen",
-    "founded": 2000
-  }
-  ```
-
-### 5. Eliminar marca
-- **Método:** `DELETE`
-- **URL:** `/brands?id=<id>`
-- **Descripción:** Elimina una marca existente por ID.
+- **Backend:** Python, Flask, Flask-PyMongo, Flask-CORS  
+- **Base de datos:** MongoDB Atlas  
+- **Frontend:** HTML5, CSS3, Bootstrap 5, JavaScript (AJAX con Axios)  
+- **Control de versiones:** Git + GitHub  
 
 ---
 
-## 📁 Importar en Postman
+## 📂 Estructura del Proyecto
 
-Puedes importar el archivo `Endpoints API.postman_collection.json` directamente en Postman para comenzar a probar los endpoints.
-
-1. Abre Postman
-2. Clic en **Import**
-3. Selecciona el archivo `.json` de esta colección
+```
+/clothing_store
+│   .env                       # Variables de entorno (Mongo URI de Atlas)
+│   README.md                  # Instrucciones y documentación del proyecto
+│   requirements.txt            # Dependencias del proyecto
+│
+├── front-end
+│   ├── index.html              # Interfaz principal (CRUD + reports)
+│   │
+│   ├── scripts/
+│   │   └── app.js              # Lógica de CRUD y reports con AJAX/Axios
+│   │
+│   └── styles/
+│       └── app.css             # Estilos con Bootstrap y CSS personalizado
+│
+└── api
+    └── v1
+        ├── run.py              # Punto de entrada de Flask
+        └── app
+            ├── index.py        # Configuración de Flask, PyMongo y CORS
+            │
+            ├── controllers/    # Controladores de las colecciones y reports
+            └── models/         # Modelos de las colecciones
+```
 
 ---
 
-## 👥 Integrantes del proyecto
+## ⚙️ Instalación y Ejecución
 
-* Julian Hernandez
-* Gabriel Mata
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/usuario/PROYECTO-GIB-HUB.git
+   cd PROYECTO-GIB-HUB
+   ```
+
+2. **Crear y activar un entorno virtual (recomendado):**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate   # En Linux/Mac
+   .venv\Scripts\activate    # En Windows
+   ```
+
+3. **Instalar dependencias:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configurar variables de entorno:**  
+   Crear un archivo `.env` en la raíz del proyecto con el contenido:
+   ```env
+   MONGO_URI=mongodb+srv://<usuario>:<password>@<cluster>.mongodb.net/clothing_store
+   ```
+
+5. **Ejecutar la API:**
+   ```bash
+   cd api/v1
+   python run.py
+   ```
+   La API quedará corriendo en `http://127.0.0.1:5000`.
+
+6. **Abrir el frontend:**  
+   Abrir en el navegador el archivo `front-end/index.html`.
+
+---
+
+## 🗄️ Colecciones en MongoDB
+
+El proyecto maneja las siguientes colecciones:
+
+- **brands** → Marcas de ropa  
+- **clothing** → Prendas y calzado  
+- **sales** → Ventas realizadas  
+- **users** → Usuarios registrados  
+
+Todas las colecciones están relacionadas mediante **IDs autogenerados**.
+
+---
+
+## 📊 Reportes Implementados
+
+1. **Listado de todas las marcas que tienen al menos una venta.**  
+2. **Prendas vendidas y su cantidad restante en stock.**  
+3. **Top 5 marcas más vendidas y cantidad de ventas.**  
+
+---
+
+## 🧑‍💻 Endpoints Principales
+
+Ejemplo de endpoints disponibles (documentados en los controllers):
+
+- `GET /api/v1/brands` → Listar marcas  
+- `POST /api/v1/brands` → Crear marca  
+- `PUT /api/v1/brands/<id>` → Editar marca  
+- `DELETE /api/v1/brands/<id>` → Eliminar marca  
+
+*(Se repite la misma lógica para `clothing`, `sales`, `users`)*
+
+---
+
+## ✅ Requisitos del Proyecto
+
+Archivo `requirements.txt` incluido con todas las dependencias:
+
+```
+blinker==1.9.0
+click==8.2.1
+colorama==0.4.6
+dnspython==2.7.0
+Flask==3.1.1
+flask-cors==6.0.1
+Flask-PyMongo==3.0.1
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+pymongo==4.13.2
+python-dotenv==1.1.1
+Werkzeug==3.1.3
+```
+
+---
+
+## 🤝 Contribución
+
+Si deseas contribuir, haz un **fork** del proyecto, crea una rama con tu mejora y abre un **Pull Request**.
+
+---
+
+## 📜 Licencia
+
+Este proyecto es de uso libre para fines educativos y puede adaptarse a proyectos reales.

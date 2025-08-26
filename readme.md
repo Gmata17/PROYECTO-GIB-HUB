@@ -66,7 +66,7 @@ Incluye CRUD completo para todas las colecciones y reportes personalizados.
 4. **Configurar variables de entorno:**  
    Crear un archivo `.env` en la raíz del proyecto con el contenido:
    ```env
-   MONGO_URI=mongodb+srv://<usuario>:<password>@<cluster>.mongodb.net/clothing_store
+   MONGO_URI=mongodb+srv://<usuario>:<contraseña>@<cluster>.mongodb.net/<base_de_datos>?retryWrites=true&w=majority
    ```
 
 5. **Ejecutar la API:**
@@ -137,9 +137,10 @@ Werkzeug==3.1.3
 
 ---
 
-## 🤝 Contribución
+## 👨🏻‍💻 Desarrollado por:
 
-Si deseas contribuir, haz un **fork** del proyecto, crea una rama con tu mejora y abre un **Pull Request**.
+- Gabriel Mata Morales
+- Julián Hernández Delgado
 
 ---
 
